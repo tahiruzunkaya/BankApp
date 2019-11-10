@@ -10,7 +10,7 @@ namespace BankAppApi.Entity
         [Key]
         public int HesapNo { get; set; }
         public int EkNo { get; set; }
-        public int Bakiye { get; set; }
+        public decimal Bakiye { get; set; }
         public bool Aktif { get; set; }
 
         public int MusteriNo { get; set; }
