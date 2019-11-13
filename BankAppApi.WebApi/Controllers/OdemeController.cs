@@ -52,6 +52,10 @@ namespace BankAppApi.WebApi.Controllers
                     data="Odeme işlemi başarıyla gerçekleştirildi."
                 });
             }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [Route("Sorgula")]
