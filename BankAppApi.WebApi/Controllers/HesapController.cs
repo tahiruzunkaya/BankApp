@@ -74,7 +74,7 @@ namespace BankAppApi.WebApi.Controllers
         {
             var tc = User.Claims.FirstOrDefault().Value;
             var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
-            var hesaplar = uow.Hesaplar.Find(x => x.MusteriNo == musteri.MusteriNo).ToList();
+            var hesaplar = uow.Hesaplar.Find(x => x.MusteriNo == musteri.MusteriNo && x.Aktif==true).ToList();
             if (hesaplar.Any())
             {
                 return Ok(hesaplar);
