@@ -15,5 +15,6 @@ namespace BankAppApi.Entity
         public int AliciHesapNo { get; set; }
         public int AliciEkNo { get; set; }
         public decimal Tutar { get; set; }
+        public int AliciMusteriNo { get; set; }
     }
 }

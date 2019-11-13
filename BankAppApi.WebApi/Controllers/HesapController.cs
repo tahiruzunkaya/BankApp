@@ -177,7 +177,33 @@ namespace BankAppApi.WebApi.Controllers
         [HttpPost]
         public IActionResult Havale([FromBody]Havale ha)
         {
-            return Ok();
+            var tc = User.Claims.FirstOrDefault().Value;
+            var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
+            ha.GonderenMusteriNo = musteri.MusteriNo;
+            var alanHesap = uow.Hesaplar.Find(x => x.MusteriNo == ha.AliciMusteriNo && x.EkNo == ha.AliciEkNo && x.Aktif == true).FirstOrDefault();
+            var gonderenHesap = uow.Hesaplar.Find(x => x.MusteriNo == ha.GonderenMusteriNo && x.EkNo == ha.GonderenEkNo && x.Aktif == true).FirstOrDefault();
+
+            if (alanHesap == null)
+            {
+                return NotFound();
+            }
+
+            alanHesap.Bakiye += ha.Tutar;
+            gonderenHesap.Bakiye -= ha.Tutar;
+
+            ha.AliciHesapNo = alanHesap.HesapNo;
+            ha.GonderenHesapNo = gonderenHesap.HesapNo;
+            
+            uow.Hesaplar.Edit(alanHesap);
+            uow.SaveChanges();
+            uow.Hesaplar.Edit(gonderenHesap);
+            uow.SaveChanges();
+            uow.Havaleler.Add(ha);
+            uow.SaveChanges();
+            return Ok(new
+            {
+                data="Havale işlemi başarıyla gerçekleşti."
+            });
         }
 
     }
