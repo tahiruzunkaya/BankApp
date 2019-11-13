@@ -19,6 +19,7 @@ namespace BankAppApi.DataAccess.Concrete.EfCore
         private IHesapRepository _hesaplar;
         private IHavaleRepository _havaleler;
         private IVirmanRepository _virmanlar;
+        private IHaraketlerRepository _haraketler;
 
         public IMusteriRepository Musteriler
         {
@@ -41,6 +42,14 @@ namespace BankAppApi.DataAccess.Concrete.EfCore
             get
             {
                 return _havaleler ?? (_havaleler = new EfHavaleRepository(dbContext));
+            }
+        }
+
+        public IHaraketlerRepository Haraketler
+        {
+            get
+            {
+                return _haraketler ?? (_haraketler = new EfHaraketlerRepository(dbContext));
             }
         }
         public IVirmanRepository Virmanlar

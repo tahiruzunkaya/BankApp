@@ -10,6 +10,7 @@ namespace BankAppApi.DataAccess.Abstract
         IHesapRepository Hesaplar { get; }
         IHavaleRepository Havaleler { get; }
         IVirmanRepository Virmanlar { get; }
+        IHaraketlerRepository Haraketler { get; }
 
         int SaveChanges();
     }

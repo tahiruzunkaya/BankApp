@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BankAppApi.DataAccess.Abstract;
 using BankAppApi.Entity;
+using BankAppApi.WebApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -187,7 +188,7 @@ namespace BankAppApi.WebApi.Controllers
             {
                 return NotFound();
             }
-
+            if (gonderenHesap.Bakiye >= ha.Tutar) { 
             alanHesap.Bakiye += ha.Tutar;
             gonderenHesap.Bakiye -= ha.Tutar;
 
@@ -204,6 +205,51 @@ namespace BankAppApi.WebApi.Controllers
             {
                 data="Havale işlemi başarıyla gerçekleşti."
             });
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+        [Route("ParaCek")]
+        [HttpPost]
+        public IActionResult ParaCek([FromBody] ParaCekModel model)
+        {
+
+            var tc = User.Claims.FirstOrDefault().Value;
+            var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
+
+            var cekilecekHesap = uow.Hesaplar.Find(x => x.EkNo == model.EkNo && x.MusteriNo == musteri.MusteriNo).FirstOrDefault();
+
+            if (cekilecekHesap.Bakiye >= model.Miktar)
+            {
+
+                cekilecekHesap.Bakiye -= model.Miktar;
+                uow.Hesaplar.Edit(cekilecekHesap);
+                uow.SaveChanges();
+                Haraketler h = new Haraketler()
+                {
+                    EkNo = cekilecekHesap.EkNo,
+                    Miktar = model.Miktar,
+                    MusteriNo = musteri.MusteriNo
+
+                };
+                uow.Haraketler.Add(h);
+                uow.SaveChanges();
+
+                return Ok(new
+                {
+                    data = "Para çekme işlemi gerçekleştirildi."
+                });
+
+            }
+            else
+            {
+                return NotFound();
+            }
+          
+            
+
         }
 
     }

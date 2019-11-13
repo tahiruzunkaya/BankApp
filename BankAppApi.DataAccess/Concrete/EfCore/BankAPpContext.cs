@@ -21,6 +21,7 @@ namespace BankAppApi.DataAccess.Concrete.EfCore
         public DbSet<Hesap> tblHesap { get; set; }
         public DbSet<Havale> tblHavale { get; set; }
         public DbSet<Virman> tblVirman { get; set; }
+        public DbSet<Haraketler> tblHaraketler { get; set; }
 
 
 
