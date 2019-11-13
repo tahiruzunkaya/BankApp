@@ -59,7 +59,7 @@ namespace BankAppApi.WebApi.Controllers
         }
 
         [Route("Sorgula")]
-        [HttpGet]
+        [HttpPost]
         public IActionResult Sorgula([FromBody] OdemeModel m)
         {
             if (aboneNo == m.aboneNo && borc!=0)
