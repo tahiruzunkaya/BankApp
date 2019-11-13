@@ -85,8 +85,12 @@ namespace BankAppApi.WebApi.Controllers
             var digerHesap = hesaplar.Find(x => x.EkNo == EkNo + 1);
             var silinenHesap = hesaplar.Find(x => x.EkNo == EkNo);
             digerHesap.Bakiye += silinenHesap.Bakiye;
-
+            silinenHesap.Aktif = false;
+            silinenHesap.Bakiye = 0;
             uow.Hesaplar.Edit(digerHesap);
+            uow.SaveChanges();
+
+            uow.Hesaplar.Edit(silinenHesap);
             uow.SaveChanges();
             return Ok(new {
                 data="Hesap başarıyla silindi, bakiye diğer hesaba aktarıldı."
