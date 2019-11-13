@@ -67,6 +67,31 @@ namespace BankAppApi.WebApi.Controllers
             return BadRequest();
         }
 
+        [Route("HesapKapat")]
+        [HttpPost]
+        public IActionResult HesapKapat([FromBody]int EkNo)
+        {
+            var tc = User.Claims.FirstOrDefault().Value;
+            var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
+            var hesaplar = uow.Hesaplar.Find(x => x.MusteriNo == musteri.MusteriNo && x.Aktif == true).ToList();
+            if (hesaplar.Count == 1 && hesaplar.FirstOrDefault().Bakiye>0)
+            {
+                return BadRequest(new
+                {
+                    error="Hesabınızdaki parayı çekmelisiniz."
+                });
+            }
+            var digerHesap = hesaplar.Find(x => x.EkNo == EkNo + 1);
+            var silinenHesap = hesaplar.Find(x => x.EkNo == EkNo);
+            digerHesap.Bakiye += silinenHesap.Bakiye;
+
+            uow.Hesaplar.Edit(digerHesap);
+            uow.SaveChanges();
+            return Ok(new {
+                data="Hesap başarıyla silindi, bakiye diğer hesaba aktarıldı."
+            });
+
+        }
 
         [Route("HesapListele")]
         [HttpGet]
