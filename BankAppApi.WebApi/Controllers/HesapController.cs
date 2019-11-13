@@ -211,6 +211,33 @@ namespace BankAppApi.WebApi.Controllers
                 return BadRequest();
             }
         }
+
+        [Route("ParaYatir")]
+        [HttpPost]
+        public IActionResult ParaYatir([FromBody] ParaCekModel model)
+        {
+            var tc = User.Claims.FirstOrDefault().Value;
+            var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
+            var cekilecekHesap = uow.Hesaplar.Find(x => x.EkNo == model.EkNo && x.MusteriNo == musteri.MusteriNo).FirstOrDefault();
+
+            cekilecekHesap.Bakiye += model.Miktar;
+            Haraketler h = new Haraketler()
+            {
+                EkNo = model.EkNo,
+                Miktar = model.Miktar,
+                MusteriNo = musteri.MusteriNo,
+                IslemTipi = model.IslemTipi
+            };
+            uow.Hesaplar.Edit(cekilecekHesap);
+            uow.SaveChanges();
+            uow.Haraketler.Add(h);
+            uow.SaveChanges();
+            return Ok(new
+            {
+                data="Para yatırma işlemi başarıyla gerçekleşti."
+            });
+        }
+
         [Route("ParaCek")]
         [HttpPost]
         public IActionResult ParaCek([FromBody] ParaCekModel model)
@@ -231,7 +258,8 @@ namespace BankAppApi.WebApi.Controllers
                 {
                     EkNo = cekilecekHesap.EkNo,
                     Miktar = model.Miktar,
-                    MusteriNo = musteri.MusteriNo
+                    MusteriNo = musteri.MusteriNo,
+                    IslemTipi=model.IslemTipi
 
                 };
                 uow.Haraketler.Add(h);

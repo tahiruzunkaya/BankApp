@@ -9,5 +9,6 @@ namespace BankAppApi.WebApi.Models
     {
         public int EkNo { get; set; }
         public int Miktar { get; set; }
+        public string IslemTipi { get; set; }
     }
 }
