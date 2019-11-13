@@ -69,8 +69,9 @@ namespace BankAppApi.WebApi.Controllers
 
         [Route("HesapKapat")]
         [HttpPost]
-        public IActionResult HesapKapat([FromBody]int EkNo)
+        public IActionResult HesapKapat([FromBody]Hesap h)
         {
+            var EkNo = h.EkNo;
             var tc = User.Claims.FirstOrDefault().Value;
             var musteri = uow.Musteriler.Find(x => x.TcKimlikNo.Equals(tc)).FirstOrDefault();
             var hesaplar = uow.Hesaplar.Find(x => x.MusteriNo == musteri.MusteriNo && x.Aktif == true).ToList();
