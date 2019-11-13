@@ -14,7 +14,7 @@ namespace BankAppApi.DataAccess.Concrete.EfCore
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-SE862OL;Database=BankApp;Trusted_Connection=True;MultipleActiveResultSets=true");
+            optionsBuilder.UseSqlServer("Server=tcp:mhrsdb.database.windows.net,1433;Initial Catalog=BankApp;Persist Security Info=False;User ID=tahiruzunkaya;Password=12481632aA;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
         public DbSet<Musteri> tblMusteri { get; set; }
