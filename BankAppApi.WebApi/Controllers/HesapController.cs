@@ -82,7 +82,7 @@ namespace BankAppApi.WebApi.Controllers
                     error="Hesabınızdaki parayı çekmelisiniz."
                 });
             }
-            var digerHesap = hesaplar.Find(x => x.EkNo == EkNo + 1);
+            var digerHesap = hesaplar.Find(x => x.EkNo != EkNo);
             var silinenHesap = hesaplar.Find(x => x.EkNo == EkNo);
             digerHesap.Bakiye += silinenHesap.Bakiye;
             silinenHesap.Aktif = false;
