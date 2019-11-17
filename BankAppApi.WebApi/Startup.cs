@@ -80,7 +80,7 @@ namespace BankAppApi.WebApi
                 app.UseHsts();
             }
             app.UseCors(
-                options => options.WithOrigins("http://localhost:62596/").AllowAnyMethod()
+                options => options.WithOrigins("http://localhost:62596").AllowAnyMethod()
             );
             app.UseAuthentication();
             app.UseHttpsRedirection();
