@@ -36,7 +36,8 @@ namespace BankAppApi.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1).AddJsonOptions(options => {
                 options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            }); 
+            });
+            services.AddCors();
             services.AddDbContext<BankAppContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IMusteriRepository, EfMusteriRepository>();
             services.AddTransient<IHesapRepository, EfHesapRepository>();
@@ -78,6 +79,9 @@ namespace BankAppApi.WebApi
             {
                 app.UseHsts();
             }
+            app.UseCors(
+                options => options.WithOrigins("http://localhost:62596/").AllowAnyMethod()
+            );
             app.UseAuthentication();
             app.UseHttpsRedirection();
             app.UseMvc();
